@@ -20,10 +20,10 @@ RUN sudo mkdir /source && \
 
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-RUN echo "export PATH=$HOME/.cargo/bin:$PATH" >> ~/.bashrc
 
 VOLUME ["/source"]
 WORKDIR /source
 
-#TODO : how to add rustup to /bin/sh PATH
-CMD $HOME/.cargo/bin/rustup update; /bin/bash
+ENV PATH=/home/rust/.cargo/bin:$PATH 
+
+CMD rustup update; echo $PATH; sleep 365;
