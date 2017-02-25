@@ -24,6 +24,6 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 VOLUME ["/source"]
 WORKDIR /source
 
-ENV PATH=/home/rust/.cargo/bin:$PATH 
+ENV PATH=/home/rust/.cargo/bin:$PATH
 
 CMD rustup update; echo $PATH; sleep 365;
