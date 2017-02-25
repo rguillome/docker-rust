@@ -20,10 +20,14 @@ RUN sudo mkdir /source && \
 
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH=/home/rust/.cargo/bin:$PATH 
+
+COPY entrypoint.sh /entrypoint.sh
+RUN sudo chmod a+x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 VOLUME ["/source"]
 WORKDIR /source
 
-ENV PATH=/home/rust/.cargo/bin:$PATH
 
-CMD rustup update; echo $PATH; sleep 365;
+CMD ["sleep 365"]

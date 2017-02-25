@@ -1,0 +1,15 @@
+env:
+  global:
+    - secure: "AmZPZsS8srhfIlfv5UqlyQhySIBGECOGM/apI05nz0QaI+7kE6wiJarLwTMQgnZhKDH1uXyqhy89f3HfaxBz49xdZdOkY7yl4hD0+jWaacbM9WwGJin3YL/0nhQzOzwGIe89uFyEx1e3kdQHSLAe+JAmu5PSZQqucD3X9Dg/i5TrKCyiT4EKWCjFMXkQPU9x+WwO0sDvHkbI6gp+3dCVDAVQXNdVXzQXpi5vISB1TowlM4VZ2dIPr2rSysCq9WFOnC7U6fW60zYIMYgVZB+UQMYApE4Gw3UqJcMEXtKLu2vX4fUqkf/XPBOaC3tx/IRt4m9s+YWZPgFaeVpEjmyyOFFWqpxYbloc6FhcwyhEnO4OvZaog3XPFJ7OzyMnsNjChLn0Wd5PAdIkWxdl0JVdjPMdcTo+Q+wQ0Gf3bPMYGFFYj7fetL8wYJVXScsfMwjLxYy4FEcrSnGkFSC9ZNPTpm5UnUglzh1K6F2YoW3atD2V8qmjXjcLzfRC2tRJo5pBudzf0E1Yg+Y0yR6PjHi2JUOJC/A8XRl+SCG6AbHIeruKiDN2yrkcw6YtBez9knOTFZg6Z2NrXmZAVZe2p2Z8f1frRruXFyaItM9Yz1bCFSZVFotA5FQDV5F/E3MiwUcKTjncofwVb1CedaumVL59R0G/w1K3ZWPJ/xnDA+OdWes=" # DOCKER_EMAIL
+    - secure: "qcerTuZTtpsWA8Oc3IEWINprnCNJtBODptIcrMzyxe11hw0dUwOUbjfj24RMXK8dTI6opcXdHfqA2c0rsOp5Sy+5Zlkfs0i6L6RWoA0NpwB9sH7nHVFy4RUsV/iF0kSgHHJBRFk2qbwkPl1ZEC1ldWmoRe7v1+j2rxQv6rEFb9BZoSNufTZLFf6FfWfspTuRzzPE6mWCfWWTLSA4tuQuiXAqT22Hee8wu+p//pkzAi1WuUmLwOWJvAUXrbk+0DZgOrOY0fAmUAycoMoa4oK8+GGz1+ei/CZngO+HnXPJ8mygBaV93acuv8bcQ7E4UmTXFd+8yovYx7dtcirWg8fi8y7SyFxaHVk8sWb+hfoqIRlU3X5BNVNMPiVhWfrwBXeidPmxUu/3ckojQk8cP7GlLTNMXkAzNUZXP1hYu7ta/5GzfjbGpK81zg1xxcgzVcfcEv1kFNtkN8DC5+afiBz3rAHkytITfIFRGKhYJzXVj9uNdFffDcNnSe60/v/MolcJnhuDZCNGCCTxcMs7qTrJtAAwzX491ntT9epDbJZT8KUtOqLC3+SliQKa2f8a2kEvNLHksIousTOZtfxI/YijwedJ+OjYyPasi5iLNQEsZnTJDla+mJVqw8skX9/KYRykKNhfUVuaIeeBZuwNsU8GyUg/wXxHuhirsXcC5m6UQJc=" # DOCKER_USER
+    - secure: "qcerTuZTtpsWA8Oc3IEWINprnCNJtBODptIcrMzyxe11hw0dUwOUbjfj24RMXK8dTI6opcXdHfqA2c0rsOp5Sy+5Zlkfs0i6L6RWoA0NpwB9sH7nHVFy4RUsV/iF0kSgHHJBRFk2qbwkPl1ZEC1ldWmoRe7v1+j2rxQv6rEFb9BZoSNufTZLFf6FfWfspTuRzzPE6mWCfWWTLSA4tuQuiXAqT22Hee8wu+p//pkzAi1WuUmLwOWJvAUXrbk+0DZgOrOY0fAmUAycoMoa4oK8+GGz1+ei/CZngO+HnXPJ8mygBaV93acuv8bcQ7E4UmTXFd+8yovYx7dtcirWg8fi8y7SyFxaHVk8sWb+hfoqIRlU3X5BNVNMPiVhWfrwBXeidPmxUu/3ckojQk8cP7GlLTNMXkAzNUZXP1hYu7ta/5GzfjbGpK81zg1xxcgzVcfcEv1kFNtkN8DC5+afiBz3rAHkytITfIFRGKhYJzXVj9uNdFffDcNnSe60/v/MolcJnhuDZCNGCCTxcMs7qTrJtAAwzX491ntT9epDbJZT8KUtOqLC3+SliQKa2f8a2kEvNLHksIousTOZtfxI/YijwedJ+OjYyPasi5iLNQEsZnTJDla+mJVqw8skX9/KYRykKNhfUVuaIeeBZuwNsU8GyUg/wXxHuhirsXcC5m6UQJc=" # DOCKER_PASS
+    - COMMIT=${TRAVIS_COMMIT::8}
+
+after_success:
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=rguillom/rust
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO
