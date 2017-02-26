@@ -1,4 +1,4 @@
-# docker-rust
+# docker-rust [![Build Status](https://travis-ci.org/rguillome/docker-rust.svg?branch=master)](https://travis-ci.org/rguillome/docker-rust)
 
 Public trusted images available on:
 
