@@ -9,11 +9,15 @@ This image provide containers that contains rustup binary and make and update ea
 
 ## Usage
 
-The following command will drop you into a Bash shell with the current directory on the host shared. From there you can run `rustc`, `rustdoc`, and `cargo` as you please.
+The following command will allow to run cargo command as a build one into the current directory. From there you can run `rustc`, `rustdoc`, and `cargo` as you please.
 
 ``` bash
-docker run -it --rm -v $(pwd):/source rguillom/rust
+docker run -it --rm -v $(pwd):/source rguillom/rust cargo build
 ```
+
+or you can just log into a bash shell
+``` bash
+docker run -it --rm -v $(pwd):/source rguillom/rust /bin/bash
 
 ## License
 
